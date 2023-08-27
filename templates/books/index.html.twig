@@ -5,7 +5,7 @@
 
     <table>
         <tr>
-        <th>ID</th>
+            <th>ID</th>
             <th>Name</th>
             <th>Price</th>
             <th>Actions</th>
@@ -17,6 +17,7 @@
                 <td>{{ book.price }}</td>
                 <td>
                     <a href="{{ path('view_book', {'id': book.id}) }}">View Details</a>
+                    <a href="{{ path('edit_book', {'id': book.id}) }}">Edit</a>
                     <a href="{{ path('delete_book', {'id': book.id}) }}" onclick="return confirm('Are you sure you want to delete this book?')">Delete</a>
                 </td>
             </tr>

@@ -80,4 +80,31 @@ class BooksController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/books/{id}/edit", name="edit_book")
+     */
+    public function editBook($id, BookRepository $bookRepository, Request $request): Response
+    {
+        $book = $bookRepository->find($id);
+
+        if (!$book) {
+            throw $this->createNotFoundException('Book not found');
+        }
+
+        $form = $this->createForm(BookType::class, $book);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            return $this->redirectToRoute('book_list');
+        }
+
+        return $this->render('books/edit.html.twig', [
+            'book' => $book,
+            'form' => $form->createView(),
+        ]);
+    }
 }

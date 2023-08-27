@@ -389,3 +389,106 @@ Open the `templates/books/index.html.twig` file and update it to include a delet
 Now, we can use the `Delete` button to delete a book
 
 ![Alt text](image-19.png)
+
+## Update the book
+
+Let's create an action to update a book and update the book list view to include an `Edit` button for each book.
+
+### Create the Action for Updating a Book
+
+In the `BookController.php`, add a new action named `editBook()`:
+
+```php
+use Symfony\Component\Routing\Annotation\Route;
+
+// ...
+
+/**
+ * @Route("/books/{id}/edit", name="edit_book")
+ */
+public function editBook($id, BookRepository $bookRepository, Request $request): Response
+{
+    $book = $bookRepository->find($id);
+
+    if (!$book) {
+        throw $this->createNotFoundException('Book not found');
+    }
+
+    $form = $this->createForm(BookType::class, $book);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->flush();
+
+        return $this->redirectToRoute('book_list');
+    }
+
+    return $this->render('books/edit.html.twig', [
+        'book' => $book,
+        'form' => $form->createView(),
+    ]);
+}
+```
+
+### Update the Book List View
+
+Open the `templates/books/index.html.twig` file and update it to include an `Edit` button for each book:
+
+```twig
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Book List</h1>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.id }}</td>
+                <td>{{ book.name }}</td>
+                <td>{{ book.price }}</td>
+                <td>
+                    <a href="{{ path('view_book', {'id': book.id}) }}">View Details</a>
+                    <a href="{{ path('edit_book', {'id': book.id}) }}">Edit</a>
+                    <a href="{{ path('delete_book', {'id': book.id}) }}" onclick="return confirm('Are you sure you want to delete this book?')">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+```
+
+Now, you can see the `Edit` button
+
+![Alt text](image-20.png)
+
+### Create the View for Editing a Book
+
+Create a new Twig template named `edit.html.twig` inside the `templates/books` directory:
+
+```twig
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Edit Book</h1>
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.price) }}
+    <button type="submit">Update Book</button>
+    {{ form_end(form) }}
+    <a href="{{ path('book_list') }}">Back to Book List</a>
+{% endblock %}
+```
+
+Now, we can have the form to update the book
+
+![Alt text](image-21.png)
+
+![Alt text](image-22.png)
