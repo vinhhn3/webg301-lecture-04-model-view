@@ -3,6 +3,12 @@
 {% block body %}
     <h1>Book List</h1>
 
+    <form action="{{ path('search_books') }}" method="get">
+        <label for="price">Search books with price greater than:</label>
+        <input type="number" name="price" id="price" required>
+        <button type="submit">Search</button>
+    </form>
+
     <table>
         <tr>
             <th>ID</th>

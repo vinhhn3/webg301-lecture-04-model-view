@@ -107,4 +107,18 @@ class BooksController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/search/books", name="search_books")
+     */
+    public function searchBooks(Request $request, BookRepository $bookRepository): Response
+    {
+        $price = $request->query->get('price', 0);
+
+        $books = $bookRepository->findBooksWithPriceGreaterThan($price);
+
+        return $this->render('books/index.html.twig', [
+            'books' => $books,
+        ]);
+    }
 }
