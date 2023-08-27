@@ -174,3 +174,74 @@ INSERT INTO book (name, price) VALUES
 Now, refresh the website to see all books
 
 ![Alt text](image-14.png)
+
+## Create a new book with Form Builder
+
+Now, we will create a new book.
+
+To do that, we need to create a form. In Symfony, we will use form builder.
+
+Open your terminal and run the following command to generate a form type:
+
+```bash
+php bin/console make:form BookType
+```
+
+![Alt text](image-15.png)
+
+Follow the prompts and generate the form type. This will create a file named `BookType.php` in the `src/Form` directory.
+
+### Create the action in the Controller for adding new book
+
+In the `BookController.php`, add a new action named `addBook()`:
+
+```php
+use App\Form\BookType;
+use Symfony\Component\HttpFoundation\Request;
+
+// ...
+
+/**
+ * @Route("/books/add", name="add_book")
+ */
+public function addBook(Request $request): Response
+{
+    $newBook = new Book();
+
+    $form = $this->createForm(BookType::class, $newBook);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($newBook);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('book_list');
+    }
+
+    return $this->render('book/add.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+```
+
+### Create the View for Adding a New Book
+
+Create a new Twig template named `add.html.twig` inside the `templates/books` directory:
+
+```twig
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Add a New Book</h1>
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.price) }}
+    <button type="submit">Add Book</button>
+    {{ form_end(form) }}
+{% endblock %}
+```
+
+Now, navigate to `http://127.0.0.1:8000/books/add` to see the form.
+
+![Alt text](image-16.png)
