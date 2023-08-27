@@ -113,3 +113,36 @@ Now, you can see the search bar
 Now, use the search bar to search for books with price greater than 15.
 
 ![Alt text](image-2.png)
+
+## Adding Category model.
+
+Now, we will expend the application. We will create the Category model with the following design.
+
+![Alt text](image-3.png)
+
+As you can see, `one` Category will belong to `many` books. So that's `one-to-many` relationship.
+
+Now, we need to generate the Category entity with command line
+
+```bash
+php bin/console make:entity
+```
+
+![Alt text](image-4.png)
+
+![Alt text](image-5.png)
+
+![Alt text](image-6.png)
+
+Now, we need to perform the migration and update the database with following command line
+
+```bash
+php bin/console make:migration
+php bin/console doctrine:migrations:migrate
+```
+
+![Alt text](image-7.png)
+
+Now, open the `phpMyAdmin`, we can see the new `Category` table and the new design
+
+![Alt text](image-8.png)
