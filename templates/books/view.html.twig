@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Book Details</h1>
+    <p><strong>Name:</strong> {{ book.name }}</p>
+    <p><strong>Price:</strong> {{ book.price }}</p>
+    <a href="{{ path('book_list') }}">Back to Book List</a>
+{% endblock %}

@@ -245,3 +245,81 @@ Create a new Twig template named `add.html.twig` inside the `templates/books` di
 Now, navigate to `http://127.0.0.1:8000/books/add` to see the form.
 
 ![Alt text](image-16.png)
+
+## Get book details.
+
+Let's create an action to display the details of a specific book, update the book list view to include a link to view details, and then create the view to display the book details.
+
+### Create the Action for Book Details
+
+In the `BookController.php`, add a new action named `viewBook()`
+
+```php
+/**
+     * @Route("/books/{id}", name="view_book")
+     */
+    public function viewBook($id, BookRepository $bookRepository): Response
+    {
+        $book = $bookRepository->find($id);
+
+        if (!$book) {
+            throw $this->createNotFoundException('Book not found');
+        }
+
+        return $this->render('books/view.html.twig', [
+            'book' => $book,
+        ]);
+    }
+```
+
+### Update the Book List View
+
+Open the `templates/books/index.html.twig` file and update it to include a link for each book to view its details:
+
+```twig
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Book List</h1>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.id }}</td>
+                <td>{{ book.name }}</td>
+                <td>{{ book.price }}</td>
+                <td><a href="{{ path('view_book', {'id': book.id}) }}">View Details</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+```
+
+Now, we can see the link `View Details`
+
+![Alt text](image-17.png)
+
+### Create the View for Book Details
+
+Create a new Twig template named `view.html.twig` inside the `templates/books` directory:
+
+```twig
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Book Details</h1>
+    <p><strong>Name:</strong> {{ book.name }}</p>
+    <p><strong>Price:</strong> {{ book.price }}</p>
+    <a href="{{ path('book_list') }}">Back to Book List</a>
+{% endblock %}
+```
+
+Now, click the `View Details`, we can see the details page
+
+![Alt text](image-18.png)

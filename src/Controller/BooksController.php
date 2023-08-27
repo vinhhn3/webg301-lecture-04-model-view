@@ -25,6 +25,22 @@ class BooksController extends AbstractController
     }
 
     /**
+     * @Route("/books/{id}", name="view_book")
+     */
+    public function viewBook($id, BookRepository $bookRepository): Response
+    {
+        $book = $bookRepository->find($id);
+
+        if (!$book) {
+            throw $this->createNotFoundException('Book not found');
+        }
+
+        return $this->render('books/view.html.twig', [
+            'book' => $book,
+        ]);
+    }
+
+    /**
      * @Route("/books/add", name="add_book")
      */
     public function addBook(Request $request): Response

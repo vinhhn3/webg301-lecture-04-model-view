@@ -8,12 +8,14 @@
             <th>ID</th>
             <th>Name</th>
             <th>Price</th>
+            <th>Actions</th>
         </tr>
         {% for book in books %}
             <tr>
                 <td>{{ book.id }}</td>
                 <td>{{ book.name }}</td>
                 <td>{{ book.price }}</td>
+                <td><a href="{{ path('view_book', {'id': book.id}) }}">View Details</a></td>
             </tr>
         {% endfor %}
     </table>
