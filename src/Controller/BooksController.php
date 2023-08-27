@@ -41,6 +41,24 @@ class BooksController extends AbstractController
     }
 
     /**
+     * @Route("/books/{id}/delete", name="delete_book")
+     */
+    public function deleteBook($id, BookRepository $bookRepository): Response
+    {
+        $book = $bookRepository->find($id);
+
+        if (!$book) {
+            throw $this->createNotFoundException('Book not found');
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($book);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('book_list');
+    }
+
+    /**
      * @Route("/books/add", name="add_book")
      */
     public function addBook(Request $request): Response

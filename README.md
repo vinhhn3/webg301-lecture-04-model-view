@@ -323,3 +323,69 @@ Create a new Twig template named `view.html.twig` inside the `templates/books` d
 Now, click the `View Details`, we can see the details page
 
 ![Alt text](image-18.png)
+
+## Delete a book
+
+### Create the Action for Deleting a Book
+
+In the `BookController.php`, add a new action named `deleteBook()`:
+
+```php
+use App\Repository\BookRepository;
+
+// ...
+
+/**
+ * @Route("/books/{id}/delete", name="delete_book")
+ */
+public function deleteBook($id, BookRepository $bookRepository): Response
+{
+    $book = $bookRepository->find($id);
+
+    if (!$book) {
+        throw $this->createNotFoundException('Book not found');
+    }
+
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->remove($book);
+    $entityManager->flush();
+
+    return $this->redirectToRoute('book_list');
+}
+```
+
+## Update the Book list view
+
+Open the `templates/books/index.html.twig` file and update it to include a delete button for each book:
+
+```twig
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Book List</h1>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.id }}</td>
+                <td>{{ book.name }}</td>
+                <td>{{ book.price }}</td>
+                <td>
+                    <a href="{{ path('view_book', {'id': book.id}) }}">View Details</a>
+                    <a href="{{ path('delete_book', {'id': book.id}) }}" onclick="return confirm('Are you sure you want to delete this book?')">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+```
+
+Now, we can use the `Delete` button to delete a book
+
+![Alt text](image-19.png)
