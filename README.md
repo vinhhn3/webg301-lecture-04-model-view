@@ -11,11 +11,11 @@ The application can help to:
 
 Below is the table design of the Books table
 
-![Alt text](image.png)
+![Alt text](/images/image.png)
 
 Small recap about MVC model
 
-![Alt text](image-1.png)
+![Alt text](images/image-1.png)
 
 ## Models
 
@@ -25,11 +25,11 @@ Now, we are going to create the `Book` Model (or Entity) by using the command li
 php bin/console make:entity
 ```
 
-![Alt text](image-2.png)
+![Alt text](images/image-2.png)
 
 Voila, you can see the `Book.php` entity is created with the `BookRepository.php`
 
-![Alt text](image-3.png)
+![Alt text](images/image-3.png)
 
 ## Connect to Database
 
@@ -37,11 +37,11 @@ After we created the Model (Entity), we will connect to the database.
 
 First of all, make sure you enable XAMPP
 
-![Alt text](image-4.png)
+![Alt text](images/image-4.png)
 
 Then, you can navigate to the URL `http://localhost/phpmyadmin/` to see the `phpMyAdmin` to manage the database
 
-![Alt text](image-5.png)
+![Alt text](images/image-5.png)
 
 Next, we need to config the `DATABASE_URL` in the `.env` file
 
@@ -56,11 +56,11 @@ Then, we can use command line to create the database
 php bin/console doctrine:database:create
 ```
 
-![Alt text](image-6.png)
+![Alt text](images/image-6.png)
 
 In the `phpMyAdmin`, you can see the database `book_store` is created.
 
-![Alt text](image-7.png)
+![Alt text](images/image-7.png)
 
 ## Create the table with migration
 
@@ -72,11 +72,11 @@ To do so, we need to create a migration first.
 php bin/console make:migration
 ```
 
-![Alt text](image-8.png)
+![Alt text](images/image-8.png)
 
 You can see the folder `migrations` is created with the migration file inside it.
 
-![Alt text](image-9.png)
+![Alt text](images/image-9.png)
 
 Now, use the command below to start create the table
 
@@ -84,11 +84,11 @@ Now, use the command below to start create the table
 php bin/console doctrine:migrations:migrate
 ```
 
-![Alt text](image-10.png)
+![Alt text](images/image-10.png)
 
 Now, the table `book` is created in the `phpMyAdmin`.
 
-![Alt text](image-11.png)
+![Alt text](images/image-11.png)
 
 ## Create the `BookController`
 
@@ -169,11 +169,11 @@ INSERT INTO book (name, price) VALUES
     ('Book 5', 40);
 ```
 
-![Alt text](image-13.png)
+![Alt text](images/image-13.png)
 
 Now, refresh the website to see all books
 
-![Alt text](image-14.png)
+![Alt text](images/image-14.png)
 
 ## Create a new book with Form Builder
 
@@ -187,7 +187,7 @@ Open your terminal and run the following command to generate a form type:
 php bin/console make:form BookType
 ```
 
-![Alt text](image-15.png)
+![Alt text](images/image-15.png)
 
 Follow the prompts and generate the form type. This will create a file named `BookType.php` in the `src/Form` directory.
 
@@ -244,7 +244,7 @@ Create a new Twig template named `add.html.twig` inside the `templates/books` di
 
 Now, navigate to `http://127.0.0.1:8000/books/add` to see the form.
 
-![Alt text](image-16.png)
+![Alt text](images/image-16.png)
 
 ## Get book details.
 
@@ -303,7 +303,7 @@ Open the `templates/books/index.html.twig` file and update it to include a link 
 
 Now, we can see the link `View Details`
 
-![Alt text](image-17.png)
+![Alt text](images/image-17.png)
 
 ### Create the View for Book Details
 
@@ -322,7 +322,7 @@ Create a new Twig template named `view.html.twig` inside the `templates/books` d
 
 Now, click the `View Details`, we can see the details page
 
-![Alt text](image-18.png)
+![Alt text](images/image-18.png)
 
 ## Delete a book
 
@@ -388,7 +388,7 @@ Open the `templates/books/index.html.twig` file and update it to include a delet
 
 Now, we can use the `Delete` button to delete a book
 
-![Alt text](image-19.png)
+![Alt text](images/image-19.png)
 
 ## Update the book
 
@@ -467,7 +467,7 @@ Open the `templates/books/index.html.twig` file and update it to include an `Edi
 
 Now, you can see the `Edit` button
 
-![Alt text](image-20.png)
+![Alt text](images/image-20.png)
 
 ### Create the View for Editing a Book
 
@@ -489,6 +489,6 @@ Create a new Twig template named `edit.html.twig` inside the `templates/books` d
 
 Now, we can have the form to update the book
 
-![Alt text](image-21.png)
+![Alt text](images/image-21.png)
 
-![Alt text](image-22.png)
+![Alt text](images/image-22.png)
