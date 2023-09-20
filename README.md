@@ -161,3 +161,50 @@ VALUES
 ```
 
 ![Alt text](image-9.png)
+
+## Modify the FormBuilder to include the Category
+
+Open the `src/Form/BookType.php` file.
+
+You'll need to add a field for selecting the Category. Assuming you have a relation between Book and Category called category, you can use the `EntityType` field type for this purpose.
+
+```php
+use App\Entity\Category; // Import the Category entity
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+// ...
+
+class BookType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('name')
+            ->add('price')
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name', // Display category names in the dropdown
+                'placeholder' => 'Select a category', // Optional: Add a placeholder
+            ]);
+    }
+}
+```
+
+Open the form template for Book (located at `templates/book/add.html.twig`) and add the category field to the form.
+
+```twig
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Add a New Book</h1>
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.price) }}
+    {{ form_row(form.category) }} {# Add this line to display the category dropdown #}
+    <button type="submit">Add Book</button>
+    {{ form_end(form) }}
+{% endblock %}
+```
+
+Now, navigate to `http://127.0.0.1:8000/books/add`, you can see the Category field
+
+![Alt text](image-10.png)

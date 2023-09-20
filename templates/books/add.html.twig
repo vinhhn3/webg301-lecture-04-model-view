@@ -5,6 +5,7 @@
     {{ form_start(form) }}
     {{ form_row(form.name) }}
     {{ form_row(form.price) }}
+    {{ form_row(form.category) }} {# Add this line to display the category dropdown #}
     <button type="submit">Add Book</button>
     {{ form_end(form) }}
 {% endblock %}

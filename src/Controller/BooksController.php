@@ -25,6 +25,29 @@ class BooksController extends AbstractController
     }
 
     /**
+     * @Route("/books/add", name="add_book")
+     */
+    public function addBook(Request $request): Response
+    {
+        $newBook = new Book();
+
+        $form = $this->createForm(BookType::class, $newBook);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($newBook);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('book_list');
+        }
+
+        return $this->render('books/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/books/{id}", name="view_book")
      */
     public function viewBook($id, BookRepository $bookRepository): Response
@@ -58,28 +81,7 @@ class BooksController extends AbstractController
         return $this->redirectToRoute('book_list');
     }
 
-    /**
-     * @Route("/books/add", name="add_book")
-     */
-    public function addBook(Request $request): Response
-    {
-        $newBook = new Book();
 
-        $form = $this->createForm(BookType::class, $newBook);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($newBook);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('book_list');
-        }
-
-        return $this->render('books/add.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
 
     /**
      * @Route("/books/{id}/edit", name="edit_book")
