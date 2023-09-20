@@ -3,6 +3,8 @@
 {% block body %}
     <h1>Book List</h1>
 
+    <a href="{{ path('add_book') }}" class="btn btn-primary">Add Book</a>
+
     <form action="{{ path('search_books') }}" method="get">
         <label for="price">Search books with price greater than:</label>
         <input type="number" name="price" id="price" required>
@@ -14,6 +16,7 @@
             <th>ID</th>
             <th>Name</th>
             <th>Price</th>
+            <th>Category</th>
             <th>Actions</th>
         </tr>
         {% for book in books %}
@@ -21,6 +24,7 @@
                 <td>{{ book.id }}</td>
                 <td>{{ book.name }}</td>
                 <td>{{ book.price }}</td>
+                <td>{{ book.category.name }}</td>
                 <td>
                     <a href="{{ path('view_book', {'id': book.id}) }}">View Details</a>
                     <a href="{{ path('edit_book', {'id': book.id}) }}">Edit</a>

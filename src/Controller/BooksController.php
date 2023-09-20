@@ -17,7 +17,7 @@ class BooksController extends AbstractController
      */
     public function index(BookRepository $bookRepository): Response
     {
-        $books = $bookRepository->findAll();
+        $books = $bookRepository->findAllWithCategory();
 
         return $this->render('books/index.html.twig', [
             'books' => $books,

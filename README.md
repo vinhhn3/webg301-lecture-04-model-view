@@ -208,3 +208,124 @@ Open the form template for Book (located at `templates/book/add.html.twig`) and 
 Now, navigate to `http://127.0.0.1:8000/books/add`, you can see the Category field
 
 ![Alt text](image-10.png)
+
+## Update the BooksController and the index view to display all books with the category name
+
+Open the `BooksController.php` file.
+
+In the `index` action, fetch books with their associated categories using a custom query. You'll need to join the Category entity to the Book entity.
+
+```php
+/**
+ * @Route("/books", name="book_list")
+ */
+public function index(BookRepository $bookRepository): Response
+{
+    $books = $bookRepository->findAllWithCategory(); // <- change this line
+
+    return $this->render('books/index.html.twig', [
+        'books' => $books,
+    ]);
+}
+```
+
+Create a custom repository function in your `BookRepository` to fetch books with their associated categories.
+
+```php
+class BookRepository extends ServiceEntityRepository
+{
+    // ...
+
+    public function findAllWithCategory()
+    {
+        return $this->createQueryBuilder('b')
+            ->leftJoin('b.category', 'c')
+            ->addSelect('c')
+            ->getQuery()
+            ->getResult();
+    }
+}
+```
+
+Open the `templates/book/index.html.twig` file.
+
+Modify the table header to include a "Category" column:
+
+```twig
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Category</th> <!-- Add this line -->
+    <th>Actions</th>
+</tr>
+```
+
+Update the table rows to display the category name for each book:
+
+```twig
+{% for book in books %}
+    <tr>
+        <td>{{ book.id }}</td>
+        <td>{{ book.name }}</td>
+        <td>{{ book.price }}</td>
+        <td>{{ book.category.name }}</td> <!-- Display the category name -->
+        <td>
+            <a href="{{ path('view_book', {'id': book.id}) }}">View Details</a>
+            <a href="{{ path('edit_book', {'id': book.id}) }}">Edit</a>
+            <a href="{{ path('delete_book', {'id': book.id}) }}" onclick="return confirm('Are you sure you want to delete this book?')">Delete</a>
+        </td>
+    </tr>
+{% endfor %}
+```
+
+Now, add the new book
+
+![Alt text](image-11.png)
+
+You can see books displayed with the category name.
+
+![Alt text](image-12.png)
+
+## Add a button to the index view to navigate to add view
+
+Open the `templates/books/index.html.twig` file.
+
+Add a new button or link at the top of the page, above the table of books, to navigate to the "Add Book" view. You can use the path function to generate the URL for the "Add Book" route.
+
+```twig
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>Book List</h1>
+
+    <a href="{{ path('add_book') }}" class="btn btn-primary">Add Book</a> <!-- Add this button -->
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.id }}</td>
+                <td>{{ book.name }}</td>
+                <td>{{ book.price }}</td>
+                <td>{{ book.category.name }}</td>
+                <td>
+                    <a href="{{ path('view_book', {'id': book.id}) }}">View Details</a>
+                    <a href="{{ path('edit_book', {'id': book.id}) }}">Edit</a>
+                    <a href="{{ path('delete_book', {'id': book.id}) }}" onclick="return confirm('Are you sure you want to delete this book?')">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+```
+
+Now, you can see a link for adding a new book
+
+![Alt text](image-13.png)
