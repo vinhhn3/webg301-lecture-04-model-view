@@ -17,6 +17,21 @@ Small recap about MVC model
 
 ![Alt text](images/image-1.png)
 
+## Initialization the Project
+
+First of all, we need to initialize the Project
+
+```bash
+symfony new --webapp webg301-lecture-04-model-view
+```
+
+Then, go the the project folder and start the Visual Studio Code
+
+```bash
+cd webg301-lecture-04-model-view
+code .
+```
+
 ## Models
 
 Now, we are going to create the `Book` Model (or Entity) by using the command line and follow the steps below
