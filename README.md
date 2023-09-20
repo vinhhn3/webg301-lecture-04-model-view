@@ -146,3 +146,18 @@ php bin/console doctrine:migrations:migrate
 Now, open the `phpMyAdmin`, we can see the new `Category` table and the new design
 
 ![Alt text](image-8.png)
+
+## Create SQL query to insert samples Category to the database
+
+To insert sample Category data into your database using SQL, you can execute an SQL query like this:
+
+```sql
+INSERT INTO category (name)
+VALUES
+    ('Electronics'),
+    ('Clothing'),
+    ('Books'),
+    ('Furniture');
+```
+
+![Alt text](image-9.png)
