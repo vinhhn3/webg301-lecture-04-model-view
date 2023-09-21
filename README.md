@@ -274,7 +274,7 @@ Let's create an action to display the details of a specific book, update the boo
 In the `BookController.php`, add a new action named `viewBook()`
 
 ```php
-/**
+    /**
      * @Route("/books/{id}", name="view_book")
      */
     public function viewBook($id, BookRepository $bookRepository): Response
@@ -290,6 +290,10 @@ In the `BookController.php`, add a new action named `viewBook()`
         ]);
     }
 ```
+
+The flowchart below shows how to show the details of a specific book with Id
+
+![Alt text](image-2.png)
 
 ### Update the Book List View
 
@@ -372,6 +376,10 @@ public function deleteBook($id, BookRepository $bookRepository): Response
     return $this->redirectToRoute('book_list');
 }
 ```
+
+The image below explains how to delete a book with the Id
+
+![Alt text](image-3.png)
 
 ## Update the Book list view
 
