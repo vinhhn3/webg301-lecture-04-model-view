@@ -240,6 +240,10 @@ public function addBook(Request $request): Response
 }
 ```
 
+The image below explains the code above
+
+![Alt text](image.png)
+
 ### Create the View for Adding a New Book
 
 Create a new Twig template named `add.html.twig` inside the `templates/books` directory:
@@ -445,6 +449,10 @@ public function editBook($id, BookRepository $bookRepository, Request $request):
     ]);
 }
 ```
+
+The image below explains the business of updating a book
+
+![Alt text](image-1.png)
 
 ### Update the Book List View
 
