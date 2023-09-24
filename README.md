@@ -330,7 +330,7 @@ Now, you can see a link for adding a new book
 
 ![Alt text](/images/image-13.png)
 
-To create an "Order" entity in Symfony 5.0 that can have multiple books, you can follow these steps:
+## Create Order Entity
 
 1. **Generate the Order Entity:**
 
