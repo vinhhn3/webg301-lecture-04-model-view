@@ -20,6 +20,11 @@ class Order
      */
     private $id;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     /**
      * @ORM\ManyToMany(targetEntity="Book")
      * @ORM\JoinTable(

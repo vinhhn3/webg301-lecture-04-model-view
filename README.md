@@ -361,6 +361,11 @@ To create an "Order" entity in Symfony 5.0 that can have multiple books, you can
      */
     private $id;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
    /**
     * @ORM\ManyToMany(targetEntity="Book")
     * @ORM\JoinTable(
@@ -566,3 +571,51 @@ You can now access the form to create an order by visiting the URL `/order/creat
 Remember to adapt the code and customize it according to your specific needs, including error handling, validation, and any additional fields you may require in the order or book entities.
 
 ![Alt text](image-16.png)
+
+## Create index action of OrderController to show all orders
+
+Open your `OrderController.php` file, and create an index action to retrieve and display all orders.
+
+```php
+    /**
+     * @Route("/orders", name="app_order")
+     */
+    public function index(): Response
+    {
+        // Retrieve all orders from the database
+        $orders = $this->getDoctrine()->getRepository(Order::class)->findAll();
+
+        return $this->render('order/index.html.twig', [
+            'orders' => $orders,
+        ]);
+    }
+```
+
+Create a Twig template to render the list of orders. You can create an `index.html.twig` template in the templates/order directory. Customize the template to display the order details as needed:
+
+```twig
+{% extends 'base.html.twig' %}
+
+{% block title %}List of Orders{% endblock %}
+
+{% block body %}
+    <h1>List of Orders</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+```
+
+![Alt text](image-18.png)

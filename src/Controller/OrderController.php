@@ -12,12 +12,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderController extends AbstractController
 {
     /**
-     * @Route("/order", name="app_order")
+     * @Route("/orders", name="app_order")
      */
     public function index(): Response
     {
+        // Retrieve all orders from the database
+        $orders = $this->getDoctrine()->getRepository(Order::class)->findAll();
+
         return $this->render('order/index.html.twig', [
-            'controller_name' => 'OrderController',
+            'orders' => $orders,
         ]);
     }
 
