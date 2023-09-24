@@ -2,7 +2,7 @@
 
 Now, we will use the Repository. Take a look at the architecture overview
 
-![Alt text](image.png)
+![Alt text](/images/image.png)
 
 With the repository, we can write custom query to perform variety of CRUD operations.
 
@@ -108,17 +108,17 @@ Open the `templates/books/index.html.twig` file and add a search bar above the b
 
 Now, you can see the search bar
 
-![Alt text](image-1.png)
+![Alt text](/images/image-1.png)
 
 Now, use the search bar to search for books with price greater than 15.
 
-![Alt text](image-2.png)
+![Alt text](/images/image-2.png)
 
 ## Adding Category model.
 
 Now, we will expend the application. We will create the Category model with the following design.
 
-![Alt text](image-3.png)
+![Alt text](/images/image-3.png)
 
 As you can see, `one` Category will belong to `many` books. So that's `one-to-many` relationship.
 
@@ -128,11 +128,11 @@ Now, we need to generate the Category entity with command line
 php bin/console make:entity
 ```
 
-![Alt text](image-4.png)
+![Alt text](/images/image-4.png)
 
-![Alt text](image-5.png)
+![Alt text](/images/image-5.png)
 
-![Alt text](image-6.png)
+![Alt text](/images/image-6.png)
 
 Now, we need to perform the migration and update the database with following command line
 
@@ -141,11 +141,11 @@ php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 ```
 
-![Alt text](image-7.png)
+![Alt text](/images/image-7.png)
 
 Now, open the `phpMyAdmin`, we can see the new `Category` table and the new design
 
-![Alt text](image-8.png)
+![Alt text](/images/image-8.png)
 
 ## Create SQL query to insert samples Category to the database
 
@@ -160,7 +160,7 @@ VALUES
     ('Furniture');
 ```
 
-![Alt text](image-9.png)
+![Alt text](/images/image-9.png)
 
 ## Modify the FormBuilder to include the Category
 
@@ -207,7 +207,7 @@ Open the form template for Book (located at `templates/book/add.html.twig`) and 
 
 Now, navigate to `http://127.0.0.1:8000/books/add`, you can see the Category field
 
-![Alt text](image-10.png)
+![Alt text](/images/image-10.png)
 
 ## Update the BooksController and the index view to display all books with the category name
 
@@ -281,11 +281,11 @@ Update the table rows to display the category name for each book:
 
 Now, add the new book
 
-![Alt text](image-11.png)
+![Alt text](/images/image-11.png)
 
 You can see books displayed with the category name.
 
-![Alt text](image-12.png)
+![Alt text](/images/image-12.png)
 
 ## Add a button to the index view to navigate to add view
 
@@ -328,7 +328,7 @@ Add a new button or link at the top of the page, above the table of books, to na
 
 Now, you can see a link for adding a new book
 
-![Alt text](image-13.png)
+![Alt text](/images/image-13.png)
 
 To create an "Order" entity in Symfony 5.0 that can have multiple books, you can follow these steps:
 
@@ -342,7 +342,7 @@ To create an "Order" entity in Symfony 5.0 that can have multiple books, you can
 
    This command will guide you through creating the Order entity interactively. Ensure you include the required fields for an order, such as order date, customer details, and any other relevant information.
 
-   ![Alt text](image-14.png)
+   ![Alt text](/images/image-14.png)
 
 2. **Define the Order-Book Relationship:**
 
@@ -415,7 +415,7 @@ To create an "Order" entity in Symfony 5.0 that can have multiple books, you can
    php bin/console doctrine:migrations:migrate
    ```
 
-   ![Alt text](image-15.png)
+   ![Alt text](/images/image-15.png)
 
 4. **Use the Order Entity:**
 
@@ -570,7 +570,7 @@ You can now access the form to create an order by visiting the URL `/order/creat
 
 Remember to adapt the code and customize it according to your specific needs, including error handling, validation, and any additional fields you may require in the order or book entities.
 
-![Alt text](image-16.png)
+![Alt text](/images/image-16.png)
 
 ## Create index action of OrderController to show all orders
 
@@ -618,4 +618,4 @@ Create a Twig template to render the list of orders. You can create an `index.ht
 {% endblock %}
 ```
 
-![Alt text](image-18.png)
+![Alt text](/images/image-18.png)
