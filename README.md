@@ -329,3 +329,240 @@ Add a new button or link at the top of the page, above the table of books, to na
 Now, you can see a link for adding a new book
 
 ![Alt text](image-13.png)
+
+To create an "Order" entity in Symfony 5.0 that can have multiple books, you can follow these steps:
+
+1. **Generate the Order Entity:**
+
+   You can use the Symfony console to generate the Order entity with the necessary fields and associations. Open your terminal and navigate to your Symfony project directory, then run the following command:
+
+   ```bash
+   php bin/console make:entity Order
+   ```
+
+   This command will guide you through creating the Order entity interactively. Ensure you include the required fields for an order, such as order date, customer details, and any other relevant information.
+
+   ![Alt text](image-14.png)
+
+2. **Define the Order-Book Relationship:**
+
+   In your "Order" entity class (e.g., `Order.php`), define the relationship with the "Book" entity. Since an order can have multiple books, you should use a ManyToMany relationship. Update the class like this:
+
+   ```php
+   // src/Entity/Order.php
+
+   use Doctrine\Common\Collections\ArrayCollection;
+   use Doctrine\Common\Collections\Collection;
+
+   /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+   /**
+    * @ORM\ManyToMany(targetEntity="Book")
+    * @ORM\JoinTable(
+    *     name="order_books",
+    *     joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id")},
+    *     inverseJoinColumns={@ORM\JoinColumn(name="book_id", referencedColumnName="id")}
+    * )
+    */
+   private $books;
+
+   public function __construct() {
+       $this->books = new ArrayCollection();
+   }
+
+   /**
+    * @return Collection|Book[]
+    */
+   public function getBooks(): Collection {
+       return $this->books;
+   }
+
+   public function addBook(Book $book): self {
+       if (!$this->books->contains($book)) {
+           $this->books[] = $book;
+       }
+
+       return $this;
+   }
+
+   public function removeBook(Book $book): self {
+       if ($this->books->contains($book)) {
+           $this->books->removeElement($book);
+       }
+
+       return $this;
+   }
+   ```
+
+   This code defines a ManyToMany relationship between "Order" and "Book" entities using an intermediate table named `order_books`. It also provides methods for adding and removing books from an order.
+
+3. **Update the Database Schema:**
+
+   After defining the "Order" entity and the relationship, apply the changes to the database schema using the Symfony console:
+
+   ```bash
+   php bin/console doctrine:migrations:diff
+   php bin/console doctrine:migrations:migrate
+   ```
+
+   ![Alt text](image-15.png)
+
+4. **Use the Order Entity:**
+
+   You can now use the "Order" entity in your Symfony application to create, read, update, and delete orders that can have multiple associated books.
+
+Remember to adjust field names, validation rules, and other details according to your specific requirements. Once you've completed these steps, your Symfony application should support orders with multiple associated books using the "Order" entity.
+
+## Create an Order
+
+To create an order by adding one book, you'll need to create a controller and a form in Symfony 5.0. Here are the steps to achieve this:
+
+**Step 1: Generate a Controller**
+
+Run the following Symfony console command to generate a new controller:
+
+```bash
+php bin/console make:controller OrderController
+```
+
+This command will create a new controller class called `OrderController.php` in the `src/Controller` directory.
+
+**Step 2: Create the Form Type**
+
+Now, create a form type for the order. Run the following command:
+
+```bash
+php bin/console make:form OrderType
+```
+
+This will generate a form type class called `OrderType.php` in the `src/Form` directory.
+
+**Step 3: Define the Form**
+
+Open the `OrderType.php` file and define the form fields. You can include fields for the order date, customer details, and the book to add to the order. For simplicity, let's assume you have an "orderDate" field and a "book" field:
+
+```php
+// src/Form/OrderType.php
+namespace App\Form;
+
+use App\Entity\Book;
+use App\Entity\Order;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class OrderType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->add('books', EntityType::class, [
+            'class' => Book::class,
+            'label' => 'Book',
+            'multiple' => true, // Allow multiple book selections if needed
+            'choice_label' => 'name', // Display book names in the dropdown
+        ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Order::class,
+        ]);
+    }
+}
+
+```
+
+**Step 4: Create the Controller Action**
+
+Open the `OrderController.php` file and add an action to create an order. In this action, you'll handle the form submission and persist the order with one selected book.
+
+```php
+// src/Controller/OrderController.php
+
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Order;
+use App\Form\OrderType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class OrderController extends AbstractController
+{
+    /**
+     * @Route("/order", name="app_order")
+     */
+    public function index(): Response
+    {
+        return $this->render('order/index.html.twig', [
+            'controller_name' => 'OrderController',
+        ]);
+    }
+
+    /**
+     * @Route("/order/create", name="create_order")
+     */
+    public function createOrder(Request $request): Response
+    {
+        $order = new Order();
+        $form = $this->createForm(OrderType::class, $order);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($order);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Order created successfully');
+
+            return $this->redirectToRoute('app_order'); // Replace with your order listing route
+        }
+
+        return $this->render('order/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+}
+
+```
+
+Replace `'your_order_listing_route'` with the route where you want to display a list of orders.
+
+**Step 5: Create a Template**
+
+Create a template file for the form (e.g., `create.html.twig`) in the `templates/order` directory. Customize the template as needed to render the form fields and handle the submission.
+
+```twig
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Order{% endblock %}
+
+{% block body %}
+    <h1>Create Order</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.books) }}
+    <button type="submit">Create Order</button>
+    {{ form_end(form) }}
+{% endblock %}
+```
+
+**Step 7: Access the Form**
+
+You can now access the form to create an order by visiting the URL `/order/create` in your Symfony application. This form will allow you to select a book and specify an order date, and when submitted, it will create an order with one book associated with it.
+
+Remember to adapt the code and customize it according to your specific needs, including error handling, validation, and any additional fields you may require in the order or book entities.
+
+![Alt text](image-16.png)

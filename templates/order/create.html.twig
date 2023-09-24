@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Order{% endblock %}
+
+{% block body %}
+    <h1>Create Order</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.books) }}
+    <button type="submit">Create Order</button>
+    {{ form_end(form) }}
+{% endblock %}
