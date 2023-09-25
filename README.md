@@ -42,18 +42,16 @@ class BookRepository extends ServiceEntityRepository
 }
 ```
 
-## Create a New Controller for Handling the Search Query
+## Create a New Action for Handling the Search Query
 
-Create a new controller file named `SearchController.php` in the `src/Controller` directory.
-
-Add the following code to the `SearchController.php` file:
+Add the following code to the `BooksController.php` file:
 
 ```php
 use App\Repository\BookRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SearchController extends AbstractController
+class BooksController extends AbstractController
 {
     /**
      * @Route("/search/books", name="search_books")
