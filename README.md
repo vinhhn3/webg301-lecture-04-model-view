@@ -28,6 +28,11 @@ class BookRepository extends ServiceEntityRepository
 
     public function findBooksWithPriceGreaterThan($price): array
     {
+        // This function is equivalent to the following SQL query
+        // SELECT *
+        // FROM books b
+        // WHERE b.price > :price
+
         return $this->createQueryBuilder('b')
             ->andWhere('b.price > :price')
             ->setParameter('price', $price)
@@ -238,6 +243,11 @@ class BookRepository extends ServiceEntityRepository
 
     public function findAllWithCategory()
     {
+        // This equivalent to the following SQL query
+        // SELECT b.*, c.*
+        // FROM book b
+        // LEFT JOIN category c ON b.category_id = c.id
+
         return $this->createQueryBuilder('b')
             ->leftJoin('b.category', 'c')
             ->addSelect('c')
